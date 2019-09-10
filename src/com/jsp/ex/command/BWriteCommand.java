@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.jsp.ex.dao.BDao;
 
 public class BWriteCommand implements BCommand {
-
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("==== ENTER BWriteCommand ====");

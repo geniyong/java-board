@@ -13,7 +13,7 @@
 				padding:16px;
 			}
 		</style>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	</head>
 	<body>
 		<div class="wrapper">
@@ -33,7 +33,7 @@
 						<tr onclick="window.location='/contentview.do?post=${dto.bId}';">
 							<th> ${dto.bId} </th>
 							<td> ${dto.bName} </td>
-							<td> ${dto.bTitle} </td>
+							<td> <c:forEach begin="3" end="${dto.bIndent}">&nbsp&nbsp</c:forEach><c:if test="${dto.bIndent > 1}">¦¦</c:if>${dto.bTitle} </td>
 							<td> ${dto.bDate} </td>
 							<td> ${dto.bHit} </td>
 						</tr>

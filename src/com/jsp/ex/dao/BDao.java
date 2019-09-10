@@ -42,7 +42,7 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * from mvc_board");
+			rs = stmt.executeQuery("SELECT * from mvc_board ORDER BY bGroup ASC, bIndent ASC, bStep ASC");
 			while(rs.next()) {
 				int bId = rs.getInt("bId");
 				String bName = rs.getString("bName");
@@ -157,6 +157,58 @@ public class BDao {
 		return dto;
 	}
 	
+	public boolean modify(int bId, String bTitle, String bContent) {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = dataSource.getConnection();
+			String sql = "UPDATE mvc_board SET bTitle=?, bContent=? WHERE bId=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, bTitle);
+			pstmt.setString(2, bContent);
+			pstmt.setInt(3, bId);
+			pstmt.executeUpdate();
+			result = true;
+		} catch(Exception e) {
+			result = false;
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public boolean delete(int bId) {
+		boolean result = false;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = dataSource.getConnection();
+			String sql = "DELETE FROM mvc_board WHERE bId=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bId);
+			pstmt.executeUpdate();
+			result = true;
+		} catch(Exception e) {
+			result = false;
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
+				if(con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
 	public int getMaxGroup(){
 		int result = -1;
 		Connection con = null;
@@ -179,6 +231,39 @@ public class BDao {
 			try {
 				if(rs != null) rs.close();
 				if(stmt != null) stmt.close();
+				if(con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public int getRecentStep(int _bGroup, int _bIndent) {
+		int result = -1;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			con = dataSource.getConnection();
+			String sql = "SELECT MAX(bStep) AS 'max' FROM mvc_board Where bGroup=? and bIndent=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, _bGroup);
+			pstmt.setInt(2, _bIndent);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				result = rs.getInt("max");
+			}
+			
+		} catch(Exception e) {
+			result = -1;
+			e.printStackTrace();
+		} finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
 				if(con != null) con.close();
 			} catch(Exception e) {
 				e.printStackTrace();

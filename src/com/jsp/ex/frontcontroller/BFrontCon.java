@@ -2,7 +2,6 @@ package com.jsp.ex.frontcontroller;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jsp.ex.command.BCommand;
 import com.jsp.ex.command.BContentCommand;
+import com.jsp.ex.command.BDeleteCommand;
 import com.jsp.ex.command.BListCommand;
+import com.jsp.ex.command.BModifyCommand;
+import com.jsp.ex.command.BModifyViewCommand;
+import com.jsp.ex.command.BReplyCommand;
+import com.jsp.ex.command.BReplyViewCommand;
 import com.jsp.ex.command.BWriteCommand;
 
 /**
@@ -69,6 +73,31 @@ public class BFrontCon extends HttpServlet {
 			command = new BContentCommand();
 			command.execute(request, response);
 			request.getRequestDispatcher("contentView.jsp").forward(request, response);
+		}
+		else if(com.equals("/replyview.do")) {
+			command = new BReplyViewCommand();
+			command.execute(request, response);
+			request.getRequestDispatcher("replyView.jsp").forward(request, response);
+		}
+		else if(com.equals("/reply.do")) {
+			command = new BReplyCommand();
+			command.execute(request, response);
+			response.sendRedirect("/list.do");
+		}
+		else if(com.equals("/modifyview.do")) {
+			command = new BModifyViewCommand();
+			command.execute(request, response);
+			request.getRequestDispatcher("modifyView.jsp").forward(request, response);
+		}
+		else if(com.equals("/modify.do")) {
+			command = new BModifyCommand();
+			command.execute(request, response);
+			response.sendRedirect("/list.do");
+		}
+		else if(com.equals("/delete.do")) {
+			command = new BDeleteCommand();
+			command.execute(request, response);
+			response.sendRedirect("/list.do");
 		}
 	}	
 }

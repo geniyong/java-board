@@ -14,6 +14,12 @@
 			}
 		</style>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script>
+			function toDelete(){
+				var cf = confirm("정말로 삭제하시겠습니까?")
+				if(cf) location.href = "/delete.do?post=${post.bId}"
+			}
+		</script>		
 	</head>
 	<body>
 		<div class="wrapper">
@@ -58,9 +64,9 @@
 			</table>
 			<p style="text-align:center;">
 				<a class="btn btn-secondary" href="/list.do" style="margin-right:10px;">목록</a>
-				<a class="btn btn-success" href="/reply.do?post=${post.bId}" style="margin-right:10px;">답글 작성</a>
-				<a class="btn btn-warning" href="/modify.do?post=${post.bId}" style="margin-right:10px;">수정</a>
-				<a class="btn btn-danger" href="/delete.do?post=${post.bId}">삭제</a>
+				<a class="btn btn-success" href="/replyview.do?post=${post.bId}" style="margin-right:10px;">답글 작성</a>
+				<a class="btn btn-warning" href="/modifyview.do?post=${post.bId}" style="margin-right:10px;">수정</a>
+				<button class="btn btn-danger" onclick="toDelete()">삭제</button>
 			</p>
 		</div>
 	</body>
