@@ -24,16 +24,27 @@ public class BReplyCommand implements BCommand {
 			e.printStackTrace();
 			response.sendError(400, "잘못된 접근입니다.");
 		}
-		if (originBId != null) dto = dao.content(originBId);
-		
-		String bName = request.getParameter("bName");
-		String bTitle = request.getParameter("bTitle");
-		String bContent = request.getParameter("bContent");
-		Date bDate = new Date(System.currentTimeMillis());
-		int bGroup = dto.getbGroup(); // 원글의 group 과 동일
-		int bIndent = dto.getbIndent() + 1; // 원글의 indent 에서 depth + 1
-		int bStep = dao.getRecentStep(bGroup, bIndent) + 1;
-		boolean result = dao.write(bName, bTitle, bContent, bDate, bGroup, bStep, bIndent);
-		request.setAttribute("writeStatus", result);
+		if (originBId != null) {
+			try {
+				dto = dao.content(originBId);
+				dao.setStep(dto.getbGroup(), dto.getbStep());
+				String bName = request.getParameter("bName");
+				String bTitle = request.getParameter("bTitle");
+				String bContent = request.getParameter("bContent");
+				Date bDate = new Date(System.currentTimeMillis());
+				int bGroup = dto.getbGroup(); // 원글의 group 과 동일
+				int bIndent = dto.getbIndent() + 1; // 원글의 indent 에서 depth + 1
+				int bStep = dto.getbStep() + 1; // 원글의 step 에서 step + 1
+				boolean result = dao.write(bName, bTitle, bContent, bDate, bGroup, bStep, bIndent);
+				request.setAttribute("writeStatus", result);
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+				response.sendError(500, "DB 접근 오류");
+			}
+		}
+		else {
+			response.sendError(400, "잘못된 접근입니다.");
+		}
 	}
 }

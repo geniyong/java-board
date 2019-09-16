@@ -42,7 +42,7 @@ public class BDao {
 		try {
 			con = dataSource.getConnection();
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * from mvc_board ORDER BY bGroup ASC, bIndent ASC, bStep ASC");
+			rs = stmt.executeQuery("SELECT * from mvc_board ORDER BY bGroup DESC, bStep ASC");
 			while(rs.next()) {
 				int bId = rs.getInt("bId");
 				String bName = rs.getString("bName");
@@ -231,6 +231,32 @@ public class BDao {
 			try {
 				if(rs != null) rs.close();
 				if(stmt != null) stmt.close();
+				if(con != null) con.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public int setStep(int _bGroup, int _bStep) {
+		int result = -1;
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = dataSource.getConnection();
+			String sql = "UPDATE mvc_board SET bStep=bStep+1 Where bGroup=? and bStep>?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, _bGroup);
+			pstmt.setInt(2, _bStep);
+			result = pstmt.executeUpdate();
+			
+		} catch(Exception e) {
+			result = -1;
+			e.printStackTrace();
+		} finally {
+			try {
+				if(pstmt != null) pstmt.close();
 				if(con != null) con.close();
 			} catch(Exception e) {
 				e.printStackTrace();
